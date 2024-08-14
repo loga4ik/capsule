@@ -33,7 +33,7 @@ const page = () => {
   };
   return (
     <>
-      <div className="border-2 border-gray-400 rounded-md m-3 p-3">
+      <div className="border-2 border-gray-400 rounded-md m-3 p-3 w-3/5">
         <p className="form-title">регистрация</p>
         <form
           className="flex flex-col items-center"
@@ -74,17 +74,17 @@ const page = () => {
             inputType="text"
             placeholder="login"
             register={register("login")}
-          />{" "}
+          />
           <Input
-            className="form_input password_input"
+            className="form_input password_input focus:animate-pulse"
             inputType="password"
             placeholder="password"
             register={register("password")}
-          />{" "}
+          />
           <Button
             type="button"
             isEmpty={true}
-            className="self-end font-semibold text-sm text-indigo-600 hover:text-indigo-500"
+            className="self-end font-semibold text-sm text-indigo-600 hover:text-indigo-500 hover:underline"
             onClick={() => router.push("/login")}
           >
             уже есть аккаунт
