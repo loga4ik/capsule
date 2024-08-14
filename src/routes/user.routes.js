@@ -1,6 +1,5 @@
 const Router = require("express").Router();
 
-const { where } = require("sequelize");
 const { user } = require("../db/models");
 const bcrypt = require("bcryptjs");
 
@@ -60,6 +59,8 @@ Router.post("/login", async (req, res) => {
         return res.status(401).send("invalid password or login").json();
       } else {
         req.session.user_id = currentUser.id;
+          console.log(req.session);
+          
         res.json(currentUser);
       }
     } catch (error) {
