@@ -1,19 +1,9 @@
+import { UserReg, UserType } from "@/types/UserTypes";
 import * as userApi from "./userApi";
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-type OneItem = {
-  id: number;
-  login: string;
-  password: string;
-  createdAt: Date;
-  updateAt: Date;
-};
-// type User = {
-//   id: number;
-//   login: string;
-// };
 
 type State = {
-  userList: OneItem[];
+  userList: UserType[];
   currentUser?: CurrentUser;
   error?: string;
 };
@@ -36,30 +26,44 @@ export const setAllUserDefault = createAsyncThunk("logOut", () =>
 );
 
 export const loginUser = createAsyncThunk<
-  OneItem,
-  userApi.UserData,
+  UserType,
+  userApi.AuthData,
   { rejectValue: string }
->("login", async ({ login, password }: userApi.UserData, thunkAPI) => {
+>("login", async ({ login, password }: userApi.AuthData, thunkAPI) => {
   try {
     const user = await userApi.login({ login, password });
-    return user as OneItem;
+    return user as UserType;
   } catch (error) {
     return thunkAPI.rejectWithValue(`${error}`);
   }
 });
 
 export const registerUser = createAsyncThunk<
-  OneItem,
-  userApi.UserData,
+  UserType,
+  UserReg,
   { rejectValue: string }
->("register", async ({ login, password }: userApi.UserData, thunkAPI) => {
-  try {
-    const user = await userApi.register({ login, password });
-    return user as OneItem;
-  } catch (error) {
-    return thunkAPI.rejectWithValue(`${error}`);
+>(
+  "register",
+  async (
+    { login, name, surname, patronymic, email, phone, password }: UserReg,
+    thunkAPI
+  ) => {
+    try {
+      const user = await userApi.register({
+        login,
+        password,
+        name,
+        surname,
+        patronymic,
+        email,
+        phone,
+      });
+      return user as UserType;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(`${error}`);
+    }
   }
-});
+);
 
 const userSlice = createSlice({
   name: "user",

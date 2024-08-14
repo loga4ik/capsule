@@ -10,15 +10,15 @@ import { getCookie } from "@/lib/Slices/userSlice/userSlice";
 const Home = () => {
   const router = useRouter();
   const currentUser = useSelector((state: RootState) => state.user.currentUser);
-  const dispatch = useDispatch<AppDispatch>();
+  // const dispatch = useDispatch<AppDispatch>();
 
-  useEffect(() => {
-    (async () => {
-      const query = await dispatch(getCookie());
-      console.log(query);
-      !query.payload && router.push("/login");
-    })();
-  }, [dispatch]);
+  // useEffect(() => {
+  //   (async () => {
+  //     const query = await dispatch(getCookie());
+  //     console.log(query);
+  //     !query.payload && router.push("/login");
+  //   })();
+  // }, [dispatch]);
 
   const loginClickHandler = () => {
     !currentUser && router.push("/login");

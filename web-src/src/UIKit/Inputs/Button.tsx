@@ -8,6 +8,7 @@ type props = {
   ) => void;
   children?: ReactNode;
   type: "submit" | "button";
+  isEmpty?: boolean;
 };
 
 export const Button: React.FC<props> = ({
@@ -16,22 +17,14 @@ export const Button: React.FC<props> = ({
   onClick,
   children,
   type,
+  isEmpty,
 }) => {
-  const theme = "dark";
   return (
     <>
       <button
         type={type ? type : "button"}
         className={`${className} ${
-          changableIconClass
-            ? theme !== "dark"
-              ? changableIconClass
-              : changableIconClass + "_dark"
-            : ""
-        } ${
-          theme === "dark"
-            ? "dark_out_small text_dark"
-            : "light_out_small text_light"
+          !isEmpty && "border rounded-sm border-gray-400 m-2 bg-gray-200 w-3/5"
         }`}
         onClick={onClick}
       >

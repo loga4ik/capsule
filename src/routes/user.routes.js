@@ -50,7 +50,7 @@ Router.post("/login", async (req, res) => {
   try {
     try {
       const currentUser = await user.findOne({ where: { login } });
-      console.log(currentUser);
+      // console.log(currentUser);
       const isMatch = await comparePassword({
         possiblePassword: password,
         hashedPassword: currentUser.password,
@@ -59,8 +59,8 @@ Router.post("/login", async (req, res) => {
         return res.status(401).send("invalid password or login").json();
       } else {
         req.session.user_id = currentUser.id;
-          console.log(req.session);
-          
+        // console.log(req.session);
+
         res.json(currentUser);
       }
     } catch (error) {
@@ -82,25 +82,28 @@ Router.post("/create", async (req, res) => {
     profile_image,
     password,
   } = req.body;
+
+  console.log(req.body);
+
   try {
     const isBusy = await user.findOne({ where: { login: login } });
     if (isBusy) {
       res.status(401).send("this login is already taken").json();
     } else {
+      const data = await user.create({
+        login,
+        name,
+        surname,
+        patronymic,
+        email,
+        phone,
+        profile_image,
+        password,
+        role_id: 1,
+      });
+      req.session.user_id = data.id;
+      res.json(data);
     }
-    const data = await user.create({
-      login,
-      name,
-      surname,
-      patronymic,
-      email,
-      phone,
-      profile_image,
-      password,
-      role_id: 1,
-    });
-    req.session.user_id = data.id;
-    res.json(data);
     //принудительно вернуть ошибке с сервера
     // res.status(500).json(err);
   } catch (err) {

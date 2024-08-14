@@ -1,6 +1,7 @@
+import { UserReg, UserType } from "@/types/UserTypes";
 import { cookies } from "next/headers";
 
-export type UserData = {
+export type AuthData = {
   login: string;
   password: string;
 };
@@ -14,8 +15,8 @@ export const getUserCookie = async () => {
 
 export const logOut = async () => {
   try {
-    const response = await fetch("/user/logOut",{
-      method:"delete"
+    const response = await fetch("/user/logOut", {
+      method: "delete",
     });
     return response.json();
   } catch (error) {
@@ -23,10 +24,18 @@ export const logOut = async () => {
   }
 };
 
-export const register = async ({ login, password }: UserData) => {
+export const register = async ({
+  login,
+  password,
+  name,
+  surname,
+  patronymic,
+  email,
+  phone,
+}: UserReg) => {
   const abortController = new AbortController();
   try {
-    const response = await fetch("user/create", {
+    const response = await fetch("http://localhost:4000/api/user/create", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -34,6 +43,12 @@ export const register = async ({ login, password }: UserData) => {
       body: JSON.stringify({
         login,
         password,
+        name,
+        surname,
+        patronymic,
+        email,
+        phone,
+        profile_image: "",
       }),
       signal: abortController.signal,
     });
@@ -50,8 +65,8 @@ export const register = async ({ login, password }: UserData) => {
   }
 };
 
-export const login = async ({ login, password }: UserData) => {
-  const abortController = new AbortController();    
+export const login = async ({ login, password }: AuthData) => {
+  const abortController = new AbortController();
   try {
     const response = await fetch("http://localhost:4000/api/user/login", {
       method: "POST",
@@ -62,7 +77,7 @@ export const login = async ({ login, password }: UserData) => {
         login,
         password,
       }),
-      
+
       signal: abortController.signal,
     });
     if (!response.ok) {

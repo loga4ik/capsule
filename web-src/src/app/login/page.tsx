@@ -5,12 +5,10 @@ import Input from "@/UIKit/Inputs/Input";
 import { Button } from "@/UIKit/Inputs/Button";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
-import { UserLoginData } from "@/types/types";
+import { UserLoginData } from "@/types/UserTypes";
 import { AppDispatch } from "../../lib/store";
 import { loginUser } from "@/lib/Slices/userSlice/userSlice";
 import { cookies } from "next/headers";
-
-
 
 const page = () => {
   const router = useRouter();
@@ -26,11 +24,7 @@ const page = () => {
   const formOnSubmitHandler = (data: UserLoginData) => {
     (async () => {
       const query = await dispatch(loginUser(data));
-      if (query.payload) {
-        console.log(query.payload);
-      }
-      // cookies().set('login',query.payload)
-      // query.meta.requestStatus === "fulfilled" && router.push("/");
+      query.meta.requestStatus === "fulfilled" && router.push("/");
     })();
   };
   return (
@@ -62,6 +56,7 @@ const page = () => {
           </Button>
         </form>
       </div>
+      <button onClick={() => router.push("/register")}>создать аккаунт</button>
     </>
   );
 };
