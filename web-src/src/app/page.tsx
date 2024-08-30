@@ -3,8 +3,8 @@
 
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../lib/store";
-import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import { getCookie } from "@/lib/Slices/userSlice/userSlice";
 
 const Home = () => {
@@ -15,17 +15,18 @@ const Home = () => {
   // useEffect(() => {
   //   (async () => {
   //     const query = await dispatch(getCookie());
-  //     console.log(query);
   //     !query.payload && router.push("/login");
   //   })();
   // }, [dispatch]);
 
   const loginClickHandler = () => {
-    !currentUser && router.push("/login");
+    // !currentUser && router.push("/login");
+    router.push("/login");
   };
   return (
     <>
       <div className="dark">
+        <p>{currentUser && currentUser.login}</p>
         <button onClick={loginClickHandler} className="dark:text-dark">
           login
         </button>

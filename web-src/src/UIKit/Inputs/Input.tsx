@@ -27,7 +27,7 @@ const Input = forwardRef<HTMLInputElement, Props>(
           mask="+7(___)-___-__-__"
           replacement={{ _: /\d/ }}
           placeholder={placeholder}
-          className={`${className} border-2 mx-2 my-1 rounded-sm`}
+          className={`${className} border-2 mx-2 my-1 rounded-sm outline-inherit`}
           {...register}
         />
       );
@@ -35,7 +35,7 @@ const Input = forwardRef<HTMLInputElement, Props>(
     return (
       <input
         ref={ref}
-        className={`${className} border-2 mx-2 my-1 rounded-sm`}
+        className={`${className} border-2 mx-2 my-1 rounded-sm outline-inherit`}
         type={inputType}
         placeholder={placeholder}
         value={value}

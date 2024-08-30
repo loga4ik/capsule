@@ -11,7 +11,7 @@ const sessionConfig = {
     maxAge: 1000 * 60 * 60 * 12, //1 час
     // maxAge: 1000 * 30, //30 секунд
     secure: false,
-    httpOnly: true,
+    httpOnly: false,
   },
 };
 module.exports = sessionConfig;

@@ -25,6 +25,10 @@ const page = () => {
     (async () => {
       const query = await dispatch(loginUser(data));
       query.meta.requestStatus === "fulfilled" && router.push("/");
+      // cookies().set("login", );
+
+      // typeof query.payload === "object" &&
+      //   cookies().set("login", query.payload.login);
     })();
   };
   return (

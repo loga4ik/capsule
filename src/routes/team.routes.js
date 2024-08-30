@@ -1,39 +1,36 @@
 const Router = require("express").Router();
 
-const { user } = require("../db/models");
-const bcrypt = require("bcryptjs");
-
-const comparePassword = async ({ possiblePassword, hashedPassword }) => {
-  return await bcrypt.compare(possiblePassword, hashedPassword);
-};
+const { where } = require("sequelize");
+const { team } = require("../db/models");
 
 Router.get("/", async (req, res) => {
-  // console.log(req.body);
-
   try {
-    // console.log(req.session.user_id);
-    const data = await user.findByPk(req.session.user_id);
-    // !data && res.status(500).json(err);
+    const data = await team.findAll();
     res.json(data);
   } catch (err) {
     res.status(500).json(err);
   }
 });
 
-Router.get("/getAllUsers", async (req, res) => {
+Router.post("/create", async (req, res) => {
+  const { user_id, project_id } = req.body;
+
   try {
-    const data = await user.findAll();
+    const data = await team.create({ user_id, project_id });
+
     res.json(data);
   } catch (err) {
     res.status(500).json(err);
   }
 });
 
-Router.delete("/logOut", async (req, res) => {
+Router.delete("/delete/:id", async (req, res) => {
+  const id = req.params.id;
   try {
-    req.session.destroy(() => {
-      res.clearCookie("user_id").json("ok");
+    const data = await team.destroy({
+      where: { id },
     });
+    res.json(data);
   } catch (err) {
     res.status(500).json(err);
   }
@@ -42,7 +39,7 @@ Router.delete("/logOut", async (req, res) => {
 Router.get("/:id", async (req, res) => {
   const id = req.params.id;
   try {
-    const data = await user.findAll({ where: { id: id } });
+    const data = await team.findAll({ where: { id: id } });
     res.json(data);
   } catch (err) {
     res.status(500).json(err);
@@ -53,7 +50,7 @@ Router.post("/login", async (req, res) => {
   const { login, password } = req.body;
   try {
     try {
-      const currentUser = await user.findOne({ where: { login } });
+      const currentUser = await project.findOne({ where: { login } });
       // console.log(currentUser);
       const isMatch = await comparePassword({
         possiblePassword: password,
@@ -76,40 +73,19 @@ Router.post("/login", async (req, res) => {
 });
 
 Router.post("/create", async (req, res) => {
-  const {
-    login,
-    name,
-    surname,
-    patronymic,
-    email,
-    phone,
-    profile_image,
-    password,
-  } = req.body;
-
-  console.log(req.body);
+  const { title, description, gitLink, img } = req.body;
+  const owner_id = req.session.user_id;
+  console.log(title, description, gitLink, img, owner_id);
 
   try {
-    const isBusy = await user.findOne({ where: { login: login } });
-    if (isBusy) {
-      res.status(401).send("this login is already taken").json();
-    } else {
-      const data = await user.create({
-        login,
-        name,
-        surname,
-        patronymic,
-        email,
-        phone,
-        profile_image,
-        password,
-        role_id: 1,
-      });
-      req.session.user_id = data.id;
-      res.json(data);
-    }
-    //принудительно вернуть ошибке с сервера
-    // res.status(500).json(err);
+    const data = await project.create({
+      title,
+      description,
+      owner_id,
+      gitLink,
+      img,
+    });
+    res.json(data);
   } catch (err) {
     res.status(500).json(err);
   }
@@ -118,7 +94,7 @@ Router.post("/create", async (req, res) => {
 Router.delete("/delete/:id", async (req, res) => {
   const id = req.params.id;
   try {
-    const data = await user.destroy({
+    const data = await project.destroy({
       where: { id },
     });
     res.json(data);

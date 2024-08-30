@@ -24,7 +24,8 @@ export const Button: React.FC<props> = ({
       <button
         type={type ? type : "button"}
         className={`${className} ${
-          !isEmpty && "border rounded-sm border-gray-400 m-2 py-0.5 px-2 bg-gray-200 w-fit text-md"
+          !isEmpty &&
+          "border rounded-md border-gray-300 m-2 py-0.5 px-2 bg-gray-200 w-fit text-md"
         }`}
         onClick={onClick}
       >

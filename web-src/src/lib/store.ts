@@ -8,6 +8,7 @@ export const makeStore = () => {
     reducer: {
       user: userSlice,
       todo: todoSlice,
+      
     },
   });
 };

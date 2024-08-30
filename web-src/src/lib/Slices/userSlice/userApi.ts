@@ -1,5 +1,6 @@
-import { UserReg, UserType } from "@/types/UserTypes";
-import { cookies } from "next/headers";
+"use client";
+
+import { UserReg } from "@/types/UserTypes";
 
 export type AuthData = {
   login: string;
@@ -8,14 +9,14 @@ export type AuthData = {
 
 export const getUserCookie = async () => {
   try {
-    const response = await fetch("http://localhost:4000/api/user");
+    const response = await fetch("/api/user");
     return response.json();
   } catch (error) {}
 };
 
 export const logOut = async () => {
   try {
-    const response = await fetch("/user/logOut", {
+    const response = await fetch("/api/user/logOut", {
       method: "delete",
     });
     return response.json();
@@ -35,7 +36,7 @@ export const register = async ({
 }: UserReg) => {
   const abortController = new AbortController();
   try {
-    const response = await fetch("http://localhost:4000/api/user/create", {
+    const response = await fetch("api/user/create", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -68,7 +69,7 @@ export const register = async ({
 export const login = async ({ login, password }: AuthData) => {
   const abortController = new AbortController();
   try {
-    const response = await fetch("http://localhost:4000/api/user/login", {
+    const response = await fetch("/api/user/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

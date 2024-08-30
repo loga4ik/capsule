@@ -1,6 +1,7 @@
 import { UserReg, UserType } from "@/types/UserTypes";
 import * as userApi from "./userApi";
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { cookies } from "next/headers";
 
 type State = {
   userList: UserType[];
@@ -85,12 +86,11 @@ const userSlice = createSlice({
 
   extraReducers: (element) => {
     element.addCase(getCookie.fulfilled, (state, action) => {
-      if (!action.payload) {
-      }
       state.currentUser = action.payload;
     });
     element.addCase(loginUser.fulfilled, (state, action) => {
       state.currentUser = action.payload;
+      // cookies().set("login", action.payload.login);
     });
     element.addCase(loginUser.rejected, (state, action) => {
       state.error = String(action.payload);
