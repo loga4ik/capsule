@@ -4,9 +4,12 @@ const morgan = require("morgan");
 const session = require("express-session");
 const getUser = require("./middlewares/getUser");
 const sessionConfig = require("./config/sessionConfig");
+const setupWebSocketServer = require("./wsServer");
+const http = require("http");
 
 const app = express();
 const PORT = process.env.PORT ?? 3001;
+const server = http.createServer(app);
 
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -23,9 +26,10 @@ app.use(express.json());
 
 // Импортируем маршруты из routes/index.js
 const routes = require("./importRoutes");
+setupWebSocketServer(server);
 
 app.use("/api", routes);
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Server started on port ${PORT}`);
 });

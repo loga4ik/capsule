@@ -1,12 +1,34 @@
 const Router = require("express").Router();
 
 const { where } = require("sequelize");
-const { team } = require("../db/models");
+const { team, user } = require("../db/models");
 
 Router.get("/", async (req, res) => {
   try {
     const data = await team.findAll();
     res.json(data);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+//получение списка участников проекта
+Router.get("/:project_id", async (req, res) => {
+  const project_id = req.params.project_id;
+
+  try {
+    const user_id_arr = await team.findAll({ where: { project_id } });
+
+    const data = await Promise.all(
+      user_id_arr.map(async (person) => {
+        return await user.findAll({
+          attributes: ["id", "login", "name", "surname", "profile_image"],
+          where: { id: person.dataValues.user_id },
+        });
+      })
+    );
+
+    res.json(...data);
   } catch (err) {
     res.status(500).json(err);
   }
